@@ -15,6 +15,8 @@ void setup() {
  pinMode (10, OUTPUT);
  pinMode (11, OUTPUT);
 
+ Serial.begin(9600);
+ Serial.println("All systems ready");
 }
 
 void loop() {
@@ -23,31 +25,35 @@ void loop() {
   unsigned int uS = sonar.ping(); 
   distance=(sonar.convert_cm(uS));
   if (distance==0) {distance=100;}
-  if (distance <10) {
+  if (distance <15) {
     Reverse();
   } 
     else
-    if (distance >10 and distance <25){
+    if (distance >15 and distance <30){
       Obstacle(); 
   }else
   {GoAhead();
+  Serial.println(distance);
 }
 }
 void GoAhead(){
-  digitalWrite(5,200);
-  digitalWrite(6,0);
-  digitalWrite(10,200);
-  digitalWrite(11,0);
+  analogWrite(5,55);
+  analogWrite(6,0);
+  analogWrite(10,55);
+  analogWrite(11,0);
+  Serial.println("Foreward");
 }
 void Reverse(){
-  digitalWrite(5,0);
-  digitalWrite(6,100);
-  digitalWrite(10,0);
-  digitalWrite(11,100);
+  analogWrite(5,0);
+  analogWrite(6,45);
+  analogWrite(10,0);
+  analogWrite(11,45);
+  Serial.println("Reverse");
 }
 void Obstacle(){
-  digitalWrite(5,100);
-  digitalWrite(6,0);
-  digitalWrite(10,0);
-  digitalWrite(11,0);
+  analogWrite(5,55);
+  analogWrite(6,0);
+  analogWrite(10,0);
+  analogWrite(11,0);
+  Serial.println("Avoid obstacle");
 }
