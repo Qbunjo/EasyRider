@@ -22,7 +22,7 @@ void loop() {
   delay(50);
   unsigned int uS = sonar.ping(); 
   distance=(sonar.convert_cm(uS));
-  if (distance==0) {distance=100);
+  if (distance==0) {distance=100;}
   if (distance <10) {
     Reverse();
   } 
