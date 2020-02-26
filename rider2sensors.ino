@@ -1,4 +1,5 @@
 #include <NewPing.h>
+#define SONAR_NUM 2
 #define TRIGGER_PINL  2  // Arduino pin tied to trigger pin on the ultrasonic sensor.
 #define TRIGGER_PINR  6
 #define ECHO_PINL     3  // Arduino pin tied to echo pin on the ultrasonic sensor.
@@ -7,8 +8,9 @@
 int distanceL = 0;
 int distanceR = 0;
 
-NewPing sonar1(TRIGGER_PINL, ECHO_PINL, MAX_DISTANCE); // NewPing setup of pins and maximum distance.
-NewPing sonar2(TRIGGER_PINR, ECHO_PINR, MAX_DISTANCE);
+NewPing sonar[SONAR_NUM] = {   // Sensor object array.
+  NewPing(TRIGGER_PINL,ECHO_PINL, MAX_DISTANCE), // Each sensor's trigger pin, echo pin, and max distance to ping. 
+  NewPing(TRIGGER_PINR, ECHO_PINR, MAX_DISTANCE)};
 
 void setup() {
   // these pins have to be PWM capable
@@ -25,10 +27,11 @@ void setup() {
 
 void loop() {
 
-  delay(50);
-  distanceL = sonar1.ping_cm();
-  delay(50);
-  distanceR = sonar2.ping_cm();
+
+    distanceL=(sonar[1].ping_cm());
+    delay(50);
+    distanceR=(sonar[2].ping_cm());
+    delay(50);
 
   if (distanceL == 0) {
     distanceL = 100;
@@ -40,13 +43,13 @@ void loop() {
   if (distanceL < 15 and distanceR < 15) { //Reverse
     Reverse();
   } else if (distanceL > distanceR) {
-    if (distanceL < 30 and distanceL => 15) {
+    if (distanceL < 30 and distanceL > 15) {
       ObstacleL();
-    }  else if (distanceR < 30 and distanceR => 15) {
+    }  else if (distanceR < 30 and distanceR > 15) {
       ObstacleR();
     }
   }
-  if (distanceL => 30 and distanceR => 30) {
+  if (distanceL > 30 and distanceR > 30) {
     GoAhead();
   }
   Serial.println(distanceL + " " + distanceR);
