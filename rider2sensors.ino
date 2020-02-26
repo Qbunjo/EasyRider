@@ -40,13 +40,13 @@ void loop() {
   if (distanceL < 15 and distanceR < 15) { //Reverse
     Reverse();
   } else if (distanceL > distanceR) {
-    if (distanceL < 30 and distanceL > 15) {
+    if (distanceL < 30 and distanceL => 15) {
       ObstacleL();
-    }  else if (distanceR < 30 and distanceR > 15) {
+    }  else if (distanceR < 30 and distanceR => 15) {
       ObstacleR();
     }
   }
-  if (distanceL > 30 and distanceR > 30) {
+  if (distanceL => 30 and distanceR => 30) {
     GoAhead();
   }
   Serial.println(distanceL + " " + distanceR);
