@@ -37,19 +37,20 @@ void loop() {
     distanceR = 100;
   }
 
-  if (distanceL < 15 and distanceR < 15) {
+  if (distanceL < 15 and distanceR < 15) { //Reverse
     Reverse();
+  } else if (distanceL > distanceR) {
+    if (distanceL < 30 and distanceL > 15) {
+      ObstacleL();
+    }  else if (distanceR < 30 and distanceR > 15) {
+      ObstacleR();
+    }
   }
-  if (distanceL < 30) {
-    ObstacleL();
+  if (distanceL > 30 and distanceR > 30) {
+    GoAhead();
   }
-  if (distanceR < 30) {
-    ObstacleR();
-  }
+  Serial.println(distanceL + " " + distanceR);
 
-  { GoAhead();
-    Serial.println(distanceL + " " + distanceR);
-  }
 }
 void GoAhead() {
   analogWrite(5, 55);
