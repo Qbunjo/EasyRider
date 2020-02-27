@@ -8,9 +8,8 @@
 int distanceL = 0;
 int distanceR = 0;
 
-NewPing sonar[SONAR_NUM] = {   // Sensor object array.
-  NewPing(TRIGGER_PINL,ECHO_PINL, MAX_DISTANCE), // Each sensor's trigger pin, echo pin, and max distance to ping. 
-  NewPing(TRIGGER_PINR, ECHO_PINR, MAX_DISTANCE)};
+NewPing sonar1 (TRIGGER_PINL, ECHO_PINL, MAX_DISTANCE); // Each sensor's trigger pin, echo pin, and max distance to ping.
+NewPing sonar2 (TRIGGER_PINR, ECHO_PINR, MAX_DISTANCE);
 
 void setup() {
   // these pins have to be PWM capable
@@ -21,65 +20,69 @@ void setup() {
   pinMode (10, OUTPUT);
   pinMode (11, OUTPUT);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("All systems ready");
 }
 
 void loop() {
 
-
-    distanceL=(sonar[1].ping_cm());
-    delay(50);
-    distanceR=(sonar[2].ping_cm());
-    delay(50);
+  delay(50);
+  distanceL = (sonar1.ping_cm());
+  delay(50);
+  distanceR = (sonar2.ping_cm());
+  delay(50);
 
   if (distanceL == 0) {
-    distanceL = 100;
+    distanceL = 31;
   }
   if (distanceR == 0) {
-    distanceR = 100;
+    distanceR = 31;
   }
 
   if (distanceL < 15 and distanceR < 15) { //Reverse
     Reverse();
-  } else if (distanceL > distanceR) {
-    if (distanceL < 30 and distanceL > 15) {
+  } else if (distanceL < 30  or distanceR < 30 and distanceL>15 and distanceR>15) {
+    if (distanceL > distanceR) {
       ObstacleL();
-    }  else if (distanceR < 30 and distanceR > 15) {
+    }
+    else {
       ObstacleR();
     }
   }
   if (distanceL > 30 and distanceR > 30) {
     GoAhead();
   }
-  Serial.println(distanceL + " " + distanceR);
+  Serial.print("L:");
+  Serial.println(distanceL);
+  Serial.print("R:");
+  Serial.println(distanceR);
 
 }
 void GoAhead() {
-  analogWrite(5, 55);
+  analogWrite(5, 105);
   analogWrite(6, 0);
-  analogWrite(10, 55);
+  analogWrite(10, 95);
   analogWrite(11, 0);
   Serial.println("Foreward");
 }
 void Reverse() {
   analogWrite(5, 0);
-  analogWrite(6, 45);
+  analogWrite(6, 100);
   analogWrite(10, 0);
-  analogWrite(11, 45);
+  analogWrite(11, 100);
   Serial.println("Reverse");
 }
 void ObstacleL() {
-  analogWrite(5, 55);
-  analogWrite(6, 0);
-  analogWrite(10, 0);
+  analogWrite(5, 00);
+  analogWrite(6, 100);
+  analogWrite(10, 100);
   analogWrite(11, 0);
   Serial.println("Avoid obstacle L");
 }
 void ObstacleR() {
-  analogWrite(5, 0);
-  analogWrite(6, 55);
+  analogWrite(5, 100);
+  analogWrite(6, 0);
   analogWrite(10, 0);
-  analogWrite(11, 0);
+  analogWrite(11, 100);
   Serial.println("Avoid obstacle R");
 }
